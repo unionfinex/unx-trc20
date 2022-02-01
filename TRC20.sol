@@ -77,22 +77,26 @@ contract TRC20 is TRC20Detailed {
     }
 
     function approve(address spender, uint256 value) public returns (bool) {
+        require(!_getBlackList(msg.sender), "TRC20: the sender is blacklisted");
         _approve(msg.sender, spender, value);
         return true;
     }
 
     function transferFrom(address sender, address recipient, uint256 amount) public returns (bool) {
+        require(!_getBlackList(sender), "TRC20: the sender is blacklisted");
         _transfer(sender, recipient, amount);
         _approve(sender, msg.sender, _allowances[sender][msg.sender].sub(amount));
         return true;
     }
 
     function increaseAllowance(address spender, uint256 addedValue) public returns (bool) {
+        require(!_getBlackList(msg.sender), "TRC20: the sender is blacklisted");
         _approve(msg.sender, spender, _allowances[msg.sender][spender].add(addedValue));
         return true;
     }
 
     function decreaseAllowance(address spender, uint256 subtractedValue) public returns (bool) {
+        require(!_getBlackList(msg.sender), "TRC20: the sender is blacklisted");
         _approve(msg.sender, spender, _allowances[msg.sender][spender].sub(subtractedValue));
         return true;
     }
